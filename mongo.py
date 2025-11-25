@@ -8,11 +8,12 @@ class CBPEnv(Enum):
 
 class MongoDB:
     def __init__(self, env : CBPEnv):
-        connection_str : str = self.get_connection_string(env)
+        connection_str : str = MongoDB.get_connection_string(env)
         self.mongo_client = pymongo.MongoClient(connection_str)
         self.mdb = self.mongo_client.get_database("test")
 
-    def get_connection_string(self, env : CBPEnv):
+    @staticmethod
+    def get_connection_string(env : CBPEnv):
         f = open('connect.str.json')
         connection__info = load(f)
         f.close()
