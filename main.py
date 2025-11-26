@@ -22,22 +22,30 @@ def make_gl_document():
     gl_doc_file.close()
 
 def get_workflow_instances():
-    mdb = MongoDB(CBPEnv.UAT)
-    for wf in mdb.WorkflowInstances:
-        print(wf)
-        break
+    with MongoDB(CBPEnv.UAT) as mdb:
+        for wf in mdb.WorkflowInstances:
+            print(wf)
+            break
 
 def get_workflow():
-    mdb = MongoDB(CBPEnv.UAT)
-    query : dict = dict()
-    query['year'] = 2026
-    query['type'] = 'forecast'
-    query['isFinal'] = True
-    for wf in mdb.GetWorkflows(queryParams=query):
-        print(wf['renovated'])
-        break
+    with MongoDB(CBPEnv.UAT) as mdb:
+        query : dict = dict()
+        query['year'] = 2026
+        query['type'] = 'forecast'
+        query['isFinal'] = True
+        for wf in mdb.GetWorkflows(queryParams=query):
+            print(wf['renovated'])
+            break
+
+def get_communities():
+    with MongoDB(CBPEnv.UAT) as mdb:
+        for comm in mdb.Communities:
+            for i, j in comm.items():
+                print(i)
+            break
+
 def main():
-    get_workflow()
+    get_communities()
 
 if __name__ == "__main__":
     main()
