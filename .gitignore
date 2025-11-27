@@ -2,3 +2,6 @@ connect.str.json
 __pycache__/
 temp.data/
 gl.csv
+logger.log
+getworkflows.cursor
+workflow.dict
