@@ -59,6 +59,9 @@ class MongoDB:
     def GetWorkflows(self,**queryParams):
         """
         Gets workflows based on the query parameters given
+        This (I think) is actually a workflow insance but with the Metadata
+
+        A workflow instance has all the CM/RA entered data
         """
         # return self.mdb.get_collection('workflows').find({'year':2024,'type':'forecast','isFinal':True})
         return self.mdb.get_collection('workflows').find(queryParams['queryParams'])
