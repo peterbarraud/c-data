@@ -1,6 +1,13 @@
 from mongo import MongoDB, CBPEnv
 from pickle import dump, load
 from logger import Logger
+from dataclasses import dataclass
+
+@dataclass
+class WorkflowInfo:
+    CommunitName : str
+    Status : str
+    Version : float
 
 def make_gl_document():
     gl_doc_file = open('gl.csv', 'w')
@@ -39,21 +46,34 @@ def get_workflows():
                 print(i, j)
             break
 
-def get_communities():
-    log = open('logger.log', 'w')
-    with MongoDB(CBPEnv.UAT) as mdb:
+def get_communities(env : CBPEnv):
+    log = Logger()
+    with MongoDB(env) as mdb:
         for comm in mdb.Communities:
             for i, j in comm.items():
-                log.write(f"* {i}: {j}\n")
+                log.Writeln(f"* {i}: {j}")
             break
     log.close()
 
+def get_workflow_name_values(mdb : MongoDB):
+    name_values : dict = dict()
+    for i, j in mdb.BusinessFlows.items():
+        name_values[i] = j['display']
+    return name_values
+
+def get_community_name_values(mdb : MongoDB):
+    name_values : dict = dict()
+    for community in mdb.Communities:
+        name_values[community['communityId']] = community['communityName']
+    return name_values
 
 def get_budget_status(env : CBPEnv):
     """
     For a specific period (budget or forecast), get the workflow status of each community
     """
     with MongoDB(env=env) as mdb:
+        community_name_values = get_community_name_values(mdb)
+        # print(community_name_values)
         # get workflows for a specific year and period
         # for testing, lets use a saved workflows
         # dict structure
@@ -83,32 +103,40 @@ def get_budget_status(env : CBPEnv):
                 workflow_by_community[community_code] = list()
             workflow_by_community[community_code].append(wf)
         # print(workflow_by_community)
+        workflow_name_values : dict = get_workflow_name_values(mdb=mdb)
         log = Logger()
-        for key_community_code, wfs in workflow_by_community.items():
-            log.Writeln(key_community_code)
-            version_list : list = list()
-            for wf in wfs:
-                if wf['isFinal']:
-                    pass
-                else:
-                    version_list.append(wf['version'])
+        processed_workflows : dict = dict()
+        for community_code, wfs in workflow_by_community.items():
+            workflow_info = WorkflowInfo(None,None,None)
+            final_wf_list = [wf for wf in wfs if wf['isFinal']]
+            if final_wf_list:
+                final_wf = final_wf_list[0]
+                workflow_info.CommunitName = final_wf['communityName']
+                workflow_info.Status = workflow_name_values[final_wf['status']]
+                workflow_info.Version = str(final_wf['version'])
+            else:
+                wf_dict = {wf['version']:wf for wf in wfs}
+                max_version = max(wf_dict,key=wf_dict.get)
+                workflow_info.CommunitName = wf_dict[max_version]['communityName']
+                workflow_info.Status = workflow_name_values[wf_dict[max_version]['status']]
+                workflow_info.Version = str(final_wf['version'])
+            processed_workflows[community_code] = workflow_info
 
             # if the workflow has one isfinal, then we take that status
             # else we use the status of the highest version
-            if any([w for w in wfs if w['isFinal']]):
-                for wf in wfs:
-
-
-                print(w['status'])
-            else:
-                pass
             # for w in wfs:
             #     log.Writeln(w['isFinal'])
             # log.Writeln('*'*50)
+        # print(processed_workflows)
+        for community_name,community__value in get_community_name_values(mdb=mdb).items():
+            print(community_name,community__value)
         log.close()
+
 
 if __name__ == "__main__":
     env : CBPEnv = CBPEnv.UAT
     print(f"We are in {env.name}")
+    # get_communities(env)
     get_budget_status(env)
+    # get_business_flows(env)
     print("ALL DONE")

@@ -56,6 +56,10 @@ class MongoDB:
         """
         return self.mdb.get_collection('workflowinstances').find()
     
+    @property
+    def BusinessFlows(self):
+        return self.mdb.get_collection("business_flows").find().next()['states']  
+
     def GetWorkflows(self,**queryParams):
         """
         Gets workflows based on the query parameters given
@@ -69,7 +73,7 @@ class MongoDB:
     @property
     def Communities(self):
         """
-        Gets all the Communities
+        Returns the cursor for all the Communities
         """
         return self.mdb.get_collection("communities").find({})
         
