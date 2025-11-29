@@ -84,7 +84,7 @@ def get_budget_status(env : CBPEnv):
         # key = community code
         # value = array of workflow dict (value of workflow_Dict)
         workflow_by_community : dict = dict()
-        isTesting = True
+        isTesting = False
         if isTesting:
             with open('testing.data/workflow.instances.obj', 'rb') as f:
                 workflow_Dict = load(f)
@@ -104,7 +104,7 @@ def get_budget_status(env : CBPEnv):
             workflow_by_community[community_code].append(wf)
         # print(workflow_by_community)
         workflow_name_values : dict = get_workflow_name_values(mdb=mdb)
-        log = Logger()
+        
         processed_workflows : dict = dict()
         for community_code, wfs in workflow_by_community.items():
             workflow_info = WorkflowInfo(None,None,None)
@@ -128,13 +128,22 @@ def get_budget_status(env : CBPEnv):
             #     log.Writeln(w['isFinal'])
             # log.Writeln('*'*50)
         # print(processed_workflows)
-        for community_name,community__value in get_community_name_values(mdb=mdb).items():
-            print(community_name,community__value)
+        log = Logger("budget.status.html")
+        all_communities = get_community_name_values(mdb=mdb)
+        log.Writeln(f'Total communities: {len(all_communities.keys())}<br>')
+        log.Writeln(f'Communties worked on: {len(processed_workflows.keys())}<br>')
+        for community_id,community__name in all_communities.items():
+            # print(community_id,community__value)
+            wf_info : WorkflowInfo = processed_workflows.get(community_id,False)
+            if wf_info:
+                log.Writeln(f'{community_id},{wf_info.CommunitName},{wf_info.Status},{wf_info.Version}<br>')
+            else:
+                log.Writeln(f'{community_id},{community__name},Not Started<br>')
         log.close()
 
 
 if __name__ == "__main__":
-    env : CBPEnv = CBPEnv.UAT
+    env : CBPEnv = CBPEnv.PROD
     print(f"We are in {env.name}")
     # get_communities(env)
     get_budget_status(env)

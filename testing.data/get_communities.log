@@ -1,24 +1,26 @@
-* _id: 64e75601575f55ac50797417
-* communityName: The Merc
-* communityId: M3500
-* units: 269
-* fund: unconsolidated
-* region: MA
-* rpm: RPM 1
+* _id: 64e7545e575f55ac507973b7
+* communityName: Lakes at Suntree
+* communityId: M5250
+* units: 216
+* fund: fundZero
+* region: FL
+* rpm: Eric Roberts
 * sameStore: True
-* rpmEmail: rpm1@northland.com
-* sqft: 246413
+* rpmEmail: eroberts@northland.com
+* sqft: 233800
 * texas_community: False
 * isActive: True
-* cm: CM 1
-* cmEmail: cm1@northland.com
+* cm: Christian Padilla
+* cmEmail: cpadilla@northland.com
 * renovated: False
-* commercialAllocation: [{'glaCategory': 'serviceContracts', 'glaName': 'cleaningContract', 'glaCode': '68090-0000', 'glaDisplay': 'Cleaning Contract', 'commercialAllocation': 8, '_id': ObjectId('656e45ace4463378934751a0')}, {'glaCategory': 'serviceContracts', 'glaName': 'fireAlarmContract', 'glaCode': '68460-0000', 'glaDisplay': 'Fire Alarm Contract', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07bd')}, {'glaCategory': 'serviceContracts', 'glaName': 'landscapingContract', 'glaCode': '68550-0000', 'glaDisplay': 'Landscaping Contract', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07be')}, {'glaCategory': 'serviceContracts', 'glaName': 'exterminatingContract', 'glaCode': '68635-0000', 'glaDisplay': 'Exterminating Contract', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07bf')}, {'glaCategory': 'serviceContracts', 'glaName': 'snowRemovalContract', 'glaCode': '69465-0000', 'glaDisplay': 'Snow Removal Contract', 'commercialAllocation': 50, '_id': ObjectId('656e4982e4463378934b07c0')}, {'glaCategory': 'serviceContracts', 'glaName': 'securityServiceContract', 'glaCode': '76460-0000', 'glaDisplay': 'Security Service Contract', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07c1')}, {'glaCategory': 'serviceContracts', 'glaName': 'trashRemoval', 'glaCode': '71500-0000', 'glaDisplay': 'Trash Removal', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07c2')}, {'glaCategory': 'repairAndMaintenance', 'glaName': 'rmBuildingExterior', 'glaCode': '68170-0000', 'glaDisplay': 'R/M-Building Exterior', 'commercialAllocation': 3, '_id': ObjectId('656e4982e4463378934b07c3')}, {'glaCategory': 'repairAndMaintenance', 'glaName': 'rmElectrical', 'glaCode': '68560-0000', 'glaDisplay': 'R/M-Electrical', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07c5')}, {'glaCategory': 'repairAndMaintenance', 'glaName': 'rmExterminating', 'glaCode': '68710-0000', 'glaDisplay': 'R/M-Exterminating', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07c6')}, {'glaCategory': 'repairAndMaintenance', 'glaName': 'rmFireEquipGenerator', 'glaCode': '68770-0000', 'glaDisplay': 'R/M-Fire Equip/Generator', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07c7')}, {'glaCategory': 'repairAndMaintenance', 'glaName': 'rmLandscaping', 'glaCode': '68980-0000', 'glaDisplay': 'R/M-Landscaping', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07c8')}, {'glaCategory': 'repairAndMaintenance', 'glaName': 'rmLightsLampsBallas', 'glaCode': '69048-0000', 'glaDisplay': 'R/M-Lights/Lamps/Ballas', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07c9')}, {'glaCategory': 'repairAndMaintenance', 'glaName': 'rmPlumbing', 'glaCode': '69220-0000', 'glaDisplay': 'R/M-Plumbing', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07ca')}, {'glaCategory': 'repairAndMaintenance', 'glaName': 'rmSnowRemoval', 'glaCode': '69460-0000', 'glaDisplay': 'R/M-Snow Removal', 'commercialAllocation': 70, '_id': ObjectId('656e4982e4463378934b07cb')}, {'glaCategory': 'repairAndMaintenance', 'glaName': 'rmFireSprinkler', 'glaCode': '69520-0000', 'glaDisplay': 'R/M- Fire Sprinkler', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07cc')}, {'glaCategory': 'utilities', 'glaName': 'electricity', 'glaCode': '71200-0000', 'glaDisplay': 'Electricity', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07cd')}, {'glaCategory': 'utilities', 'glaName': 'utilityBillingService', 'glaCode': '71550-0000', 'glaDisplay': 'Utility Billing Service', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07ce')}, {'glaCategory': 'utilities', 'glaName': 'waterSewerExpense', 'glaCode': '71650-0000', 'glaDisplay': 'Water & Sewer Expense', 'commercialAllocation': 16, '_id': ObjectId('656e4982e4463378934b07cf')}, {'glaCategory': 'generalAndAdministrative', 'glaName': 'internetAccess', 'glaCode': '75470-0000', 'glaDisplay': 'Internet Access', 'commercialAllocation': 8, '_id': ObjectId('656e4982e4463378934b07d1')}]
+* commercialAllocation: []
 * __v: 0
-* acquisition: 2017-03-18
-* aus: 916
-* state: MA
-* valuePrice: 125320000
+* acquisition: 1997-04-30
+* aus: 1082
+* state: FL
+* valuePrice: 43070000
 * tenant: 65aa3bdd81c398bb980733e6
-* unitsBreakdown: [{'unitType': 'oneBedroom', 'unitClassification': 'affordable', 'units': 14, '_id': ObjectId('6666e3ac5ea71d0f4573102a')}, {'unitType': 'oneBedroom', 'unitClassification': 'classic', 'units': 128, '_id': ObjectId('6666e3ac5ea71d0f4573102b')}, {'unitType': 'twoBedroom', 'unitClassification': 'affordable', 'units': 10, '_id': ObjectId('6666e3ac5ea71d0f4573102c')}, {'unitType': 'twoBedroom', 'unitClassification': 'classic', 'units': 92, '_id': ObjectId('6666e3ac5ea71d0f4573102d')}, {'unitType': 'threeBedroom', 'unitClassification': 'affordable', 'units': 1, '_id': ObjectId('6666e3ac5ea71d0f4573102e')}, {'unitType': 'threeBedroom', 'unitClassification': 'classic', 'units': 8, '_id': ObjectId('6666e3ac5ea71d0f4573102f')}, {'unitType': 'studio', 'unitClassification': 'affordable', 'units': 2, '_id': ObjectId('6666e3ac5ea71d0f45731030')}, {'unitType': 'studio', 'unitClassification': 'classic', 'units': 14, '_id': ObjectId('6666e3ac5ea71d0f45731031')}]
-* city: waltham
+* unitsBreakdown: [{'unitType': 'oneBedroom', 'unitClassification': 'classic', 'units': 60, '_id': ObjectId('6666e3ac5ea71d0f45731076')}, {'unitType': 'twoBedroom', 'unitClassification': 'classic', 'units': 148, '_id': ObjectId('6666e3ac5ea71d0f45731077')}, {'unitType': 'threeBedroom', 'unitClassification': 'classic', 'units': 8, '_id': ObjectId('6666e3ac5ea71d0f45731078')}]
+* city: melbourne
+* updatedAt: 2025-08-25 15:19:12.650000
+* updatedBy: {'name': 'Jayden Chen', 'role': 'DA', 'email': 'jchen@northland.com'}
