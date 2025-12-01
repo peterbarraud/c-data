@@ -1,13 +1,13 @@
 from mongo import MongoDB, CBPEnv
 from pickle import dump, load
-from logger import Logger
-from dataclasses import dataclass
+from dataclasses import fields
+import datetime
 
-@dataclass
-class WorkflowInfo:
-    CommunitName : str
-    Status : str
-    Version : float
+from logger import Logger
+from htmlbuilder import HtmlBuilder, Header, CellType
+from infoclasses import WorkflowInfo, CommunityInfo
+from nextbudgetversion import get_next_budget_status_version
+
 
 def make_gl_document():
     gl_doc_file = open('gl.csv', 'w')
@@ -61,19 +61,18 @@ def get_workflow_name_values(mdb : MongoDB):
         name_values[i] = j['display']
     return name_values
 
-def get_community_name_values(mdb : MongoDB):
-    name_values : dict = dict()
+def get_all_community_info(mdb : MongoDB):
+    communityInfo : dict = dict()
     for community in mdb.Communities:
-        name_values[community['communityId']] = community['communityName']
-    return name_values
+        communityInfo[community['communityId']] = CommunityInfo(community['communityName'],community['units']) 
+    return communityInfo
+
 
 def get_budget_status(env : CBPEnv):
     """
     For a specific period (budget or forecast), get the workflow status of each community
     """
     with MongoDB(env=env) as mdb:
-        community_name_values = get_community_name_values(mdb)
-        # print(community_name_values)
         # get workflows for a specific year and period
         # for testing, lets use a saved workflows
         # dict structure
@@ -84,7 +83,7 @@ def get_budget_status(env : CBPEnv):
         # key = community code
         # value = array of workflow dict (value of workflow_Dict)
         workflow_by_community : dict = dict()
-        isTesting = False
+        isTesting = True
         if isTesting:
             with open('testing.data/workflow.instances.obj', 'rb') as f:
                 workflow_Dict = load(f)
@@ -106,44 +105,97 @@ def get_budget_status(env : CBPEnv):
         workflow_name_values : dict = get_workflow_name_values(mdb=mdb)
         
         processed_workflows : dict = dict()
+        processed_status : dict = dict()
         for community_code, wfs in workflow_by_community.items():
-            workflow_info = WorkflowInfo(None,None,None)
+            processed_workflow = None
+            workflow_info = WorkflowInfo()
             final_wf_list = [wf for wf in wfs if wf['isFinal']]
             if final_wf_list:
-                final_wf = final_wf_list[0]
-                workflow_info.CommunitName = final_wf['communityName']
-                workflow_info.Status = workflow_name_values[final_wf['status']]
-                workflow_info.Version = str(final_wf['version'])
+                processed_workflow = final_wf_list[0]
+                
             else:
                 wf_dict = {wf['version']:wf for wf in wfs}
                 max_version = max(wf_dict,key=wf_dict.get)
-                workflow_info.CommunitName = wf_dict[max_version]['communityName']
-                workflow_info.Status = workflow_name_values[wf_dict[max_version]['status']]
-                workflow_info.Version = str(final_wf['version'])
+                processed_workflow = wf_dict[max_version]
+            workflow_info.CommunitName = processed_workflow['communityName']
+            workflow_info.Status = workflow_name_values[processed_workflow['status']]
+            workflow_info.Version = str(processed_workflow['version'])
+            workflow_info.StartDate = processed_workflow['startDate']
+            workflow_info.EndDate = processed_workflow['endDate']
+            workflow_info.Units = int(processed_workflow['units'])
+            workflow_info.CommunitName = processed_workflow['communityName']
+            if workflow_info.Status in processed_status:
+                processed_status[workflow_info.Status] += 1
+            else:
+                processed_status[workflow_info.Status] = 1            
             processed_workflows[community_code] = workflow_info
 
-            # if the workflow has one isfinal, then we take that status
-            # else we use the status of the highest version
-            # for w in wfs:
-            #     log.Writeln(w['isFinal'])
-            # log.Writeln('*'*50)
-        # print(processed_workflows)
-        log = Logger("budget.status.html")
-        all_communities = get_community_name_values(mdb=mdb)
-        log.Writeln(f'Total communities: {len(all_communities.keys())}<br>')
-        log.Writeln(f'Communties worked on: {len(processed_workflows.keys())}<br>')
-        for community_id,community__name in all_communities.items():
+        all_communities_info : dict = get_all_community_info(mdb=mdb)
+
+        html = HtmlBuilder()
+
+        html.InsertNewHeader(Header.H1,'Summary')
+        
+
+        table = html.NewTable({'border':1})
+
+        tr = html.NewTableRow(tableToAppendTo=table)
+        html.NewTableCell(CellType.TH,tr,'Total communities')
+        html.NewTableCell(CellType.TH,tr,'Communties worked on')
+        for process_stati in processed_status.keys():
+            html.NewTableCell(CellType.TH,tr,process_stati)
+        html.NewTableCell(CellType.TH,tr,'Not started')
+
+        tr = html.NewTableRow(tableToAppendTo=table)
+        html.NewTableCell(CellType.TD,tr,str(len(all_communities_info.keys())))
+        html.NewTableCell(CellType.TD,tr,str(len(processed_workflows.keys())))
+        for _, process_count in processed_status.items():
+            html.NewTableCell(CellType.TD,tr,str(process_count))
+        html.NewTableCell(CellType.TD,tr,f'{len(all_communities_info.keys())-len(processed_workflows.keys())}')
+
+        html.InsertNewHeader(Header.H1,'Community details')
+
+        table = html.NewTable({'border':1})
+
+        tr = html.NewTableRow(tableToAppendTo=table)
+
+        html.NewTableCell
+        html.NewTableCell(CellType.TH,tr,"Community code")
+        html.NewTableCell(CellType.TH,tr,"Community name")
+        html.NewTableCell(CellType.TH,tr,"Status")
+        html.NewTableCell(CellType.TH,tr,"Version")
+        html.NewTableCell(CellType.TH,tr,"Start date")
+        html.NewTableCell(CellType.TH,tr,"End date")
+        html.NewTableCell(CellType.TH,tr,"Units")
+
+
+        for community_id,community_info in all_communities_info.items():
+            tr = html.NewTableRow(tableToAppendTo=table)
             # print(community_id,community__value)
             wf_info : WorkflowInfo = processed_workflows.get(community_id,False)
+            html.NewTableCell(CellType.TD,tr,community_id)
             if wf_info:
-                log.Writeln(f'{community_id},{wf_info.CommunitName},{wf_info.Status},{wf_info.Version}<br>')
+                dates : dict = dict()
+                for field in fields(wf_info):
+                    if field.type == datetime.date:
+                        html.NewTableCell(CellType.TD,tr,getattr(wf_info, field.name).strftime('%Y-%m-%d'))
+                        dates[field.name] = getattr(wf_info, field.name)
+                    else:
+                        html.NewTableCell(CellType.TD,tr,getattr(wf_info, field.name))
+                # html.NewTableCell(CellType.TD,tr,(dates['EndDate'] - dates['StartDate']).days)
             else:
-                log.Writeln(f'{community_id},{community__name},Not Started<br>')
-        log.close()
+                html.NewTableCell(CellType.TD,tr,community_info.Name)
+                html.NewTableCell(CellType.TD,tr,'Not Started',4)
+                html.NewTableCell(CellType.TD,tr,community_info.Units)
+        html_file = f'D:/tech-stuff/cbp-data/testing.data/budget.status.v{get_next_budget_status_version()}.html'
+        html.Save(html_file)
+        print(f'Output here: {html_file}')
+
 
 
 if __name__ == "__main__":
-    env : CBPEnv = CBPEnv.PROD
+    x = get_next_budget_status_version()
+    env : CBPEnv = CBPEnv.UAT
     print(f"We are in {env.name}")
     # get_communities(env)
     get_budget_status(env)
